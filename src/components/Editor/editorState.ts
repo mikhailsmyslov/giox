@@ -122,7 +122,7 @@ export const useEditorState = (onChangeCallback = noop) => {
         let end: number = 0
         if (isOneLine) {
           start = columnStart
-          end = columnEnd
+          end = columnEnd - 1
         } else
         if (i === lineStart && !isOneLine) {
           start = columnStart
@@ -130,7 +130,7 @@ export const useEditorState = (onChangeCallback = noop) => {
         } else
         if (i === lineEnd && !isOneLine) {
           start = 0
-          end = columnEnd
+          end = columnEnd - 1
         } else
         if (i > lineStart && i < lineEnd) {
           start = 0

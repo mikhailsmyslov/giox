@@ -22,8 +22,13 @@ export const useSelection = (editor: React.RefObject<HTMLDivElement>) => {
     const anchorLineNumber = getLineNumber(findParagraph(anchorNode))
     const focusLineNumber = getLineNumber(findParagraph(focusNode))
 
-    const isBackwards = focusLineNumber < anchorLineNumber
-    return {
+    const isBackwardsLine = focusLineNumber < anchorLineNumber
+    const isSameLine = focusLineNumber === anchorLineNumber
+    let isBackwards = false
+    if (isSameLine) isBackwards = focusOffset < anchorOffset
+    if (!isSameLine && isBackwardsLine) isBackwards = true
+
+    const result = {
       start: {
         line: isBackwards ? focusLineNumber : anchorLineNumber,
         column: isBackwards ? focusOffset : anchorOffset
@@ -38,23 +43,9 @@ export const useSelection = (editor: React.RefObject<HTMLDivElement>) => {
       },
       isCollapsed: selection.isCollapsed
     }
+    console.log(result)
+    return result
   }
-
-  // const getTargetNodeToSetCaret = (column: number, node: Node | null) => {
-  //   if (!node) return null
-  //   let counter = column
-  //   const inner = (node: Node) => {
-  //     if (isTextNode(node)) {
-  //       const textLength = node.textContent?.length
-  //       if (textLength) {
-  //         if (textLength >= counter) return [node, counter]
-  //         counter -= textLength
-  //       }
-  //     }
-
-  //   }
-  //   return inner(node)
-  // }
 
   const createRange = (node: Node, charsCount: number, range?: Range): Range => {
     if (!range) {
